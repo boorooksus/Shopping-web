@@ -40,6 +40,9 @@ router.get('/', (request, response) => {
             color: grey;
             font-size: 15px;
         }
+        #menu{
+            visibility: hidden;
+        }
     </style>
     </head>
     <body>
