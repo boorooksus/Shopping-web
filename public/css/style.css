@@ -4,6 +4,15 @@
     align-items: stretch;
 }
 
+a {
+    text-decoration: none;
+}
+
+#menu{
+    /* color: lightskyblue; */
+    color: lightpink;
+}
+
 #sidebar {
     width: 200px;
     background: rgb(242,242,242);

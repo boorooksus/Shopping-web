@@ -3,9 +3,11 @@ var router = express.Router();
 var template = require('../lib/template.js');
 var auth = require('../lib/auth.js');
 
-router.get('/:pageNum', (request, response) => {
+router.get('/all/:pageNum', (request, response) => {
     var authStatusUi = auth.statusUi(request, response);
-    var contents = ``;
+    var contents = ` 
+    <hr style="margin:2px">
+    `;
     for(var i = 0; i < 12; i += 4){
       contents += `<div class="card-deck">`;
       for(var j = i; j < i + 4; j++){
@@ -18,7 +20,6 @@ router.get('/:pageNum', (request, response) => {
           <div class="card-body">
             <h5 class="card-title">Card title</h5>
             <p class="card-text">
-              Item
               10,000won
             </p>
           </div>
