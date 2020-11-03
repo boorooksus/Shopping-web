@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var template = require('../lib/template.js');
 var auth = require('../lib/auth.js');
+var db = require('../lib/db.js');
 
 router.get('/all/:pageNum', (request, response) => {
     var authStatusUi = auth.statusUi(request, response);
@@ -39,6 +40,16 @@ router.get('/all/:pageNum', (request, response) => {
     
     var html = template.html(authStatusUi, contents);
     response.send(html);
+  });
+
+  router.get('/test', (request, response) => {
+    var authStatusUi = auth.statusUi(request, response);
+    var contents = ``;
+    db.query(`SELECT * FROM user WHERE name='admin'`, function(err, result){
+      contents += result[0].email;
+      var html = template.html(authStatusUi, contents);
+      response.send(html);
+    });
   });
   
   module.exports = router;

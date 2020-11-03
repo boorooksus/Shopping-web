@@ -1,4 +1,4 @@
-db_account.js
+db.js
 node_modules
 dev.js
 prod.js

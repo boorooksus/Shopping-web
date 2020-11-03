@@ -8,6 +8,7 @@ var compression = require('compression');
 var FileStore = require('session-file-store')(session);
 var indexRouter = require('./routes/index.js');
 var productsRouter = require('./routes/products.js');
+var authRouter = require('./routes/auth.js');
 
 
 app.use(express.static('public'));
@@ -24,6 +25,7 @@ app.use(session({
 
 app.use('/', indexRouter);
 app.use('/products', productsRouter);
+app.use('/auth', authRouter);
 
 app.use(function (err, req, res, next){
     console.error(err,stack)
