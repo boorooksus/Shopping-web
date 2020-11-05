@@ -1,3 +1,16 @@
-#signIn{
+#login{
     max-width: 500px;
+}
+
+#login a {
+    text-decoration: none;
+    color: inherit;
+}
+
+#join{
+    max-width: 500px;
+}
+
+#join input{
+    margin-bottom: 10px;
 }
