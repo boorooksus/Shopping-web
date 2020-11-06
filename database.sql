@@ -17,13 +17,17 @@ CREATE TABLE `product`(
     `description` text,
     `img_name` varchar(60) NOT NULL,
     `created` datetime NOT NULL,
-    `update` datetime NOT NULL,
+    `updated` datetime NOT NULL,
+    `price` int(11) NOT NULL,
     PRIMARY KEY(`id`)
 );
 
-ALTER TABLE product ADD COLUMN price int NOT NULL;
+ALTER TABLE product ADD COLUMN category varchar(30);
 
-INSERT INTO product (name, description, img_name, created, update, price) VALUES ('test', '0000', 'wall.jpg', '2018-01-30 12:31:03', '2018-01-30 12:31:03', 10000);
+INSERT INTO product (name, description, img_name, created, updated, price) VALUES ('test', '0000', 'wall.jpg', '2018-01-01 12:10:11', '2018-01-01 12:10:11', 10000);
 
-INSERT INTO product(name, description, img_name, created, update) VALUES ('test', '0000', 'wall.jpg', NOW(), NOW());
+INSERT INTO product (name, description, img_name, created, updated, price) VALUES ('shirt', '0000', 'shirt.jpg', '2018-01-01 12:10:11', '2018-01-01 12:10:11', 20000);
 
+UPDATE product SET category = 'top' WHERE id = 1;
+
+ALTER TABLE product MODIFY price int(11);

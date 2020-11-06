@@ -13,6 +13,10 @@ a {
     color: lightpink;
 }
 
+#management{
+    color: red;
+}
+
 #sidebar {
     width: 200px;
     background: rgb(242,242,242);

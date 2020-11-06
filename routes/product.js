@@ -22,6 +22,7 @@ router.get('/:productId', function(request, response, next){
     var pid = request.params.productId;
     //var sanitizedTitle = sanitizeHtml(title);
     var authStatusUi = auth.statusUi(request, response);
+    var authProductUi = auth.productUi(request, response, pid);
     //var filteredId = path.parse(request.params.pageId).base;
     db.query(`SELECT * FROM product WHERE id=${pid}`, function(err, result){
         var name = result[0].name;
@@ -40,7 +41,8 @@ router.get('/:productId', function(request, response, next){
 			<div class="col-md-6">
                 <h3>${sanitizedName}</h3>
                 <p>${result[0].price}원</p> 
-				<p>${sanitizedDes}</p>
+                <p>${sanitizedDes}</p>
+                ${authProductUi}
 				
 			</div>
 		</div>
