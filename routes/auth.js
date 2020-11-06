@@ -5,7 +5,7 @@ var template = require('../lib/template.js');
 var auth = require('../lib/auth.js');
 var db = require('../lib/db.js');
 
-var isUserChecked;
+var isUserChecked = false;
 
 // 로그인 페이지
 router.get('/login', (request, response) => {
@@ -154,8 +154,8 @@ router.post('/login_process', (request, response)=>{
           if(compare_result === true || res[0].password === post.password){
             request.session.is_logined = true;
             request.session.name = res[0].name;
-            request.session.id = res[0].id;
-            if(res[0].id === 1){
+            request.session.user_id = res[0].id;
+            if(res[0].isAdmin){
               request.session.is_admin = true;
             }
             request.session.save(function(){
@@ -194,7 +194,7 @@ router.get('/join', (request, response) => {
     isUserChecked = false;
     var authStatusUi = auth.statusUi(request, response);
     var contents = `
-    <form id="join"  method="post">
+    <form id="join" method="post">
     <div class="form-group">
     이메일
       <input type="email" class="form-control" id="email" name="email" placeholder="Email">
@@ -220,9 +220,10 @@ router.get('/join', (request, response) => {
       생년월일
       <input type="date" class="form-control" id="birth" name="birth">
     </div>
+    
     <input type="button" class="btn btn-primary" onclick="joinCheck()" value="Join">
     </form>
- 
+
     <script type="text/javascript" src="/js/script-auth.js"></script>
     `;
     
@@ -241,15 +242,16 @@ router.post('/userCheck', (request, response) => {
          isUserChecked = false;
           response.send(`
           <script>alert("이미 가입된 회원입니다")
-          self.close();
+          window.close();
           </script> 
           `);
           return;
       } else{
           isUserChecked = true;
           response.send(`
-          <script>alert("사용 가능한 이메일입니다")
-          self.close();
+          <script>
+          alert("사용 가능한 이메일입니다")
+          window.close();
           </script> 
           `);
           return;
@@ -272,11 +274,105 @@ router.post('/join_process', (request, response)=>{
 
   bcrypt.hash(post.password, 12, function(err, hash){
       db.query(`
-      INSERT INTO user (email, password, name, birth) VALUE(?, ?, ?, ?)`, [post.email, hash, post.name, post.birth], (err, res) => {
+      INSERT INTO user (email, password, name, birth, isAdmin, created) VALUE(?, ?, ?, ?,?, NOW())`, [post.email, hash, post.name, post.birth, false], (err, res) => {
           if(err){
               throw err;
           }
           response.redirect(302, `/auth/login`);
+          
+      }
+      )
+  });
+});
+
+// 회원 탈퇴
+router.get('/leave/:id', (request, response)=>{
+  var id = request.params.id;
+  if(!auth.isAdmin(request, response) && request.session.user_id !== id){
+    response.send(`
+        <script>alert('권한이 없습니다.')
+        window.history.back();
+        </script> 
+    `);
+    return;
+}
+  db.query(`DELETE FROM user WHERE id=?`, [id], (err, res) => {
+          if(err){
+              throw err;
+          }
+          if(!auth.isAdmin(request, response)){
+            request.session.destroy(function(err){
+              response.redirect('/');
+              return;
+          });
+          } else{
+            response.redirect(302, `/admin`); 
+            return;
+          }    
+      }
+  )
+});
+
+// 회원 정보 수정 페이지
+router.get('/update/:id', (request, response) => {
+  var id = request.params.id;
+  if(!auth.isAdmin(request, response) && request.session.user_id != id){
+    response.send(`
+        <script>alert('권한이 없습니다.')
+        window.history.back();
+        </script> 
+    `);
+    return;
+}
+  isUserChecked = false;
+  var authStatusUi = auth.statusUi(request, response);
+  db.query(`SELECT * FROM user WHERE id=?`,[id],function(error, result){
+    var birth = new Date(result[0].birth);
+    var birth_str = birth.getFullYear() + '-' + ('0' + (birth.getMonth() + 1)).slice(-2) + '-' + ('0' + birth.getDate()).slice(-2);
+    console.log(birth_str);
+    var contents = `
+    <h4>회원 정보 수정</h4>
+  <form id="join"  method="post">
+  <div class="form-group">
+  </div>
+  <input type="hidden" class="form-control" name="id" value=${id}>
+  <div class="form-group">
+    비밀번호
+    <input type="password" class="form-control" id="password" name="password" placeholder="Password">
+  </div>
+  <div class="form-group">
+    비밀번호 확인
+    <input type="password" class="form-control" id="password_confirm" name="password_confirm" placeholder="Password">
+  </div>
+  <div class="form-group">
+    이름
+    <input type="text" class="form-control" value="${result[0].name}" name="name">
+  </div>
+  <div class="form-group">
+    생년월일
+    <input type="date" class="form-control" value="${birth_str}" name="birth">
+  </div>
+  <input type="button" class="btn btn-primary" onclick="updateCheck()" value="Update">
+  </form>
+
+  <script type="text/javascript" src="/js/script-auth.js"></script>
+  `;
+  
+  var html = template.html(authStatusUi, contents);
+  response.send(html);
+  });
+});
+
+// 회원 정보 수정 처리
+router.post('/update/update_process', (request, response)=>{
+  var post = request.body;
+  bcrypt.hash(post.password, 12, function(err, hash){
+      db.query(`
+      UPDATE user SET password=?, name=?, birth=? WHERE id=?`, [hash, post.name, post.birth, post.id], (err, res) => {
+          if(err){
+              throw err;
+          }
+          response.redirect(302, `/`);
           
       }
       )

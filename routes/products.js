@@ -5,15 +5,20 @@ var template = require('../lib/template.js');
 var auth = require('../lib/auth.js');
 var db = require('../lib/db.js');
 
-// 전체 상품
-router.get('/all/:pageNum', (request, response) => {
+// 전체 또는 카테고리별 상품 목록
+router.get('/:category/:pageNum', (request, response) => {
     var authStatusUi = auth.statusUi(request, response);
     var pageNum = request.params.pageNum;
+    var category = request.params.category;
+    var query = `SELECT * FROM product WHERE name IS NOT NULL AND category=? ORDER BY id DESC`;
+    if(category === "all"){
+      query = `SELECT * FROM product WHERE name IS NOT NULL ORDER BY id DESC`;
+    }
     var contents = ` 
     <hr style="margin:2px">
     `;
 
-    db.query(`SELECT * FROM product WHERE name IS NOT NULL ORDER BY id DESC`, (error, result) => {
+    db.query(query, [category], (error, result) => {
 
       var list = '<div id="columns">';
       var cur = (pageNum - 1) * 20;
@@ -90,13 +95,6 @@ router.get('/all/:pageNum', (request, response) => {
   });
 });
 
-router.get('/top/:pageNum', (request, response) => {
-  var authStatusUi = auth.statusUi(request, response);
-  var contents = ``;
-  
-  var html = template.html(authStatusUi, contents);
-  response.send(html);
-});
 
 // 상품 검색
 router.post('/search/:pageNum', (request, response) => {

@@ -11,6 +11,14 @@ INSERT INTO user(email, password, name, birth) VALUES ('admin@example.com', '000
 
 INSERT INTO user(email, password, name, birth) VALUES ('user02@example.com', '0000', 'user02', '2020-11-05');
 
+ALTER TABLE user ADD COLUMN created datetime;
+ALTER TABLE user ADD COLUMN isAdmin boolean;
+
+UPDATE user SET created = NOW();
+UPDATE user SET isAdmin = false;
+UPDATE user SET isAdmin = true WHERE id=1;
+
+
 CREATE TABLE `product`(
     `id` int(11) NOT NULL AUTO_INCREMENT,
     `name` varchar(20) NOT NULL,
