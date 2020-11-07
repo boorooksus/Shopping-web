@@ -7,7 +7,7 @@ var db = require('../lib/db.js');
 var cookie = require('cookie');
 var cookieParser = require('cookie-parser')
 
-var isUserChecked = false;
+var isUserChecked;
 
 // 로그인 페이지
 router.get('/login', (request, response) => {
@@ -498,6 +498,8 @@ router.get('/cart', (request, response) => {
     </tbody>
     </table>
     <h5>결제 금액: ${total}원</h5>
+    <button class="btn btn-success" onclick="confirm('구매 하시겠습니까?')">구매하기</button>
+    <button class="btn btn-danger" ><a href="/auth/clear_cart" onclick="return confirm('장바구니를 비우시겠습니까?')" >장바구니 비우기</a></button>
     `;
     var html = template.html(authStatusUi, contents);
     response.send(html);
@@ -523,6 +525,18 @@ router.get('/delete_cart/:productId', (request, response)=>{
   
   response.cookie('cart', cart);
 
+  response.redirect(302, `/auth/cart`);
+});
+
+// 장바구니 비우기
+router.get('/clear_cart', (request, response)=>{
+  if(request.cookies.cart) {
+    var cart = request.cookies.cart;
+    console.log("cart: " + cart);
+
+    response.cookie('cart', '', {expire: Date.now()}); 
+    console.log("==== after clear ");
+  }
   response.redirect(302, `/auth/cart`);
 });
 

@@ -19,26 +19,35 @@ router.get('/:category/:pageNum', (request, response) => {
     `;
 
     db.query(query, [category], (error, result) => {
-
-      var list = '<div id="columns">';
       var cur = (pageNum - 1) * 20;
       var end = cur + 20;
       while(cur < end && cur < result.length){
         contents += `<div class="card-deck">`;
-        for(var i=cur; i < cur + 4 && i < result.length; i++){
-          contents += `
-        <div class="card">
-        <a href="/product/${result[i].id}">
-        <img class="card-img-top" src="/images/${result[i].img_name}">
-        </a>
-          <div class="card-body">
-            <h5 class="card-title">${result[i].name}</h5>
-            <p class="card-text">
-            ${result[i].price}
-            </p>
-          </div>
-        </div>
-      `;
+        for(var i=cur; i < cur + 4; i++){
+          if(i < result.length){
+            contents += `
+              <div class="card">
+              <a href="/product/${result[i].id}">
+              <img class="card-img-top" src="/images/${result[i].img_name}">
+              </a>
+                <div class="card-body">
+                  <h5 class="card-title"><a href="/product/${result[i].id}">${result[i].name}</a></h5>
+                  <p class="card-text">
+                  ${result[i].price}
+                  </p>
+                </div>
+              </div>
+            `; 
+          } else{
+            contents += `
+            <div class="card">
+              <img class="card-img-top" src="/images/blank.jpg">
+              <div class="card-body">
+                  
+              </div>
+            </div>
+            `;
+          }
         }
         contents += `</div>`;
         cur += 4;
@@ -112,8 +121,9 @@ router.post('/search/:pageNum', (request, response) => {
     var end = cur + 20;
     while(cur < end && cur < result.length){
       contents += `<div class="card-deck">`;
-      for(var i=cur; i < cur + 4 && i < result.length; i++){
-        contents += `
+      for(var i=cur; i < cur + 4; i++){
+        if(i < result.length){
+          contents += `
       <div class="card">
       <a href="/product/${result[i].id}">
       <img class="card-img-top" src="/images/${result[i].img_name}">
@@ -126,6 +136,17 @@ router.post('/search/:pageNum', (request, response) => {
         </div>
       </div>
     `;
+        } else{
+          contents += `
+          <div class="card">
+            <img class="card-img-top" src="/images/blank.jpg">
+            <div class="card-body">
+                
+            </div>
+          </div>
+          `;
+        }
+        
       }
       contents += `</div>`;
       cur += 4;

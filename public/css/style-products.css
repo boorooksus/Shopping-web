@@ -1,5 +1,8 @@
 .card{
     max-width: 300px;
+    /* min-width: 110px;
+    min-height: 300px;*/
+    max-height: 400px; 
 }
 .card img{
     /* max-width: 500px; */
