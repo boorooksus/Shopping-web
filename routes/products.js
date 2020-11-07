@@ -59,7 +59,7 @@ router.get('/:category/:pageNum', (request, response) => {
       `;
       var i = 1;
       var end = 5;
-      if(Number(pageNum) > 5){
+      if(Number(pageNum) > 4){
         i = Number(pageNum) - 2;
         end = Number(pageNum) + 2;
       }
@@ -73,7 +73,7 @@ router.get('/:category/:pageNum', (request, response) => {
         </li>`;
         }
         else{
-          pagination += `<li class="page-item"><a class="page-link" href="/products/all/${i}">${i}</a></li>`;
+          pagination += `<li class="page-item"><a class="page-link" href="/products/${category}/${i}">${i}</a></li>`;
             //pageList += `<li><a href="/topic/browsing/${i}">[${i}]</a></li>`;
         }
         i++;
@@ -105,16 +105,22 @@ router.get('/:category/:pageNum', (request, response) => {
 });
 
 
+// 상품 검색 처리
+router.post('/search_process', (request, response) => {
+  var post = request.body;
+  response.redirect(302, `/products/search/${post.term}/1`);
+});
+
 // 상품 검색
-router.post('/search/:pageNum', (request, response) => {
+router.get('/search/:term/:pageNum', (request, response) => {
   var authStatusUi = auth.statusUi(request, response);
   var pageNum = request.params.pageNum;
-  var post = request.body;
+  var term = request.params.term;
   var contents = ` 
   <hr style="margin:2px">
   `;
 
-  db.query(`SELECT * FROM product WHERE name LIKE '%${post.term}%' OR description LIKE '%${post.term}%' ORDER BY id DESC`, (error, result) => {
+  db.query(`SELECT * FROM product WHERE name LIKE '%${term}%' OR description LIKE '%${term}%' ORDER BY id DESC`, (error, result) => {
 
     var list = '<div id="columns">';
     var cur = (pageNum - 1) * 20;
@@ -158,7 +164,7 @@ router.post('/search/:pageNum', (request, response) => {
     `;
     var i = 1;
     var end = 5;
-    if(Number(pageNum) > 5){
+    if(Number(pageNum) > 4){
       i = Number(pageNum) - 2;
       end = Number(pageNum) + 2;
     }
@@ -172,7 +178,7 @@ router.post('/search/:pageNum', (request, response) => {
       </li>`;
       }
       else{
-        pagination += `<li class="page-item"><a class="page-link" href="/products/all/${i}">${i}</a></li>`;
+        pagination += `<li class="page-item"><a class="page-link" href="/products/search/${term}/${i}">${i}</a></li>`;
       }
       i++;
     }
