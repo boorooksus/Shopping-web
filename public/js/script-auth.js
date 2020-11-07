@@ -30,10 +30,6 @@ function joinCheck(){
 }
 
 function updateCheck(){
-    if(!isUserChecked){
-
-    }
-
     var join = document.getElementById("join");
     for(var i = 0; i < join.length; i++){
         console.log(join[i].value);

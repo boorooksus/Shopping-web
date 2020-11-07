@@ -51,14 +51,14 @@ router.get('/', (request, response) => {
         for(var i = 0; i < result2.length; i++){
           var created = new Date(result2[i].created);
           var updated = new Date(result2[i].updated);
-          if(created.getDate() != updated.getDate() && created.getHours() != updated.getHours() && created.getMinutes() != updated.getMinutes()){
+          if(created.getDate() != updated.getDate() || created.getHours() != updated.getHours() || created.getMinutes() != updated.getMinutes()){
             contents += `
           <li class="list-group-item"><div>
            상품 ${result2[i].name}의 정보가 수정 되었습니다.</div>`;
           } else{
             contents += `
           <li class="list-group-item"><div>
-           상품 ${result2[i].name}이/가 등록 되었습니다.</div>`;
+           상품 ${result2[i].name}이(가) 등록 되었습니다.</div>`;
           }
           contents += `
            <div>
