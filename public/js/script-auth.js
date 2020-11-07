@@ -51,3 +51,7 @@ function updateCheck(){
     join.action = 'update_process';
     join.submit();
 }
+
+function getPrice(product){
+
+}

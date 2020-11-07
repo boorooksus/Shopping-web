@@ -14,3 +14,14 @@
 #join input{
     margin-bottom: 10px;
 }
+
+.count{
+    width:70px;
+    /* display: inline; */
+    /* padding-top: 1px; */
+}
+
+.table{
+    text-align: center;
+    max-width: 500px;
+}

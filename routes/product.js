@@ -2,6 +2,8 @@ var express = require('express');
 var router = express.Router();
 var sanitizeHtml = require('sanitize-html');
 var multer = require('multer');
+var cookie = require('cookie');
+var cookieParser = require('cookie-parser')
 
 var template = require('../lib/template.js');
 var auth = require('../lib/auth.js');
@@ -206,8 +208,9 @@ router.get('/:productId', function(request, response, next){
     <div class="col-md-6">
               <h3>${sanitizedName}</h3>
               <p>${result[0].price}원</p> 
-              <p>${sanitizedDes}</p>
               ${authProductUi}
+              <hr>
+              <p>${sanitizedDes}</p>
       
     </div>
   </div>
@@ -219,6 +222,5 @@ router.get('/:productId', function(request, response, next){
   });
 
 });
-
 
   module.exports = router;

@@ -6,6 +6,8 @@ var bodyParser = require('body-parser');
 var session = require('express-session')
 var compression = require('compression');
 var FileStore = require('session-file-store')(session);
+var cookieParser = require('cookie-parser')
+
 var indexRouter = require('./routes/index.js');
 var productsRouter = require('./routes/products.js');
 var productRouter = require('./routes/product.js');
@@ -16,6 +18,7 @@ var adminRouter = require('./routes/admin.js');
 app.use(express.static('public'));
 app.use(bodyParser.urlencoded({extended:false}));
 app.use(compression());
+app.use(cookieParser())
 
 app.use(session({
     secret: 'keyboard cat',

@@ -4,6 +4,8 @@ var bcrypt = require('bcrypt');
 var template = require('../lib/template.js');
 var auth = require('../lib/auth.js');
 var db = require('../lib/db.js');
+var cookie = require('cookie');
+var cookieParser = require('cookie-parser')
 
 var isUserChecked = false;
 
@@ -377,6 +379,151 @@ router.post('/update/update_process', (request, response)=>{
       }
       )
   });
+});
+
+// 장바구니 추가
+router.post('/add_cart', (request, response)=>{
+  if(!auth.isLogined(request, response)){
+    response.send(`
+    <script>
+    alert("로그인 후에 이용가능합니다.")
+    window.close();
+    </script> 
+    `
+    );
+    return;
+  }
+  var post = request.body;
+  console.log('start');
+  console.log("coockie: " + request.cookies);
+  if(request.cookies.cart) {
+    var cart = request.cookies.cart;
+  } else {
+    var cart = {};
+  }
+  console.log('cart_id: ', Object.keys(cart));
+
+  console.log('get lenth');
+  //아직 값이 없을 경우
+  if(!cart[post.id]){
+    cart[post.id]= post.count;
+  }
+  else{
+    cart[post.id] = parseInt(cart[post.id]) + parseInt(post.count);
+  }
+
+  var cart_keys = Object.keys(cart);
+
+  for(var i = 0; i < cart_keys.length; i++){
+    console.log(`cart[${cart_keys[i]}]: ` + cart[cart_keys[i]]);
+  }
+
+
+  response.cookie('cart', cart);
+
+  response.send(`
+    <script>
+    alert("장바구니에 상품이 추가되었습니다.")
+    window.close();
+    </script> 
+    `
+);
+});
+
+
+// 장바구니
+router.get('/cart', (request, response) => {
+  var authStatusUi = auth.statusUi(request, response);
+  var contents = `
+  <table class="table">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">상품</th>
+      <th scope="col">수량</th>
+      <th scope="col">가격</th>
+    </tr>
+  </thead>
+  <tbody>
+  `;
+
+  if(request.cookies.cart) {
+    var cart = request.cookies.cart;
+  } else {
+    contents += `
+      </tbody>
+      </table>
+      장바구니 담긴 상품이 없습니다.
+    `;
+    var html = template.html(authStatusUi, contents);
+    response.send(html);
+    return;
+  }
+  var cart_keys = Object.keys(cart);
+  var query = `
+  SELECT * FROM product WHERE id=${cart_keys[0]}
+  `;
+  for(var i = 1; cart_keys && i < cart_keys.length; i++){
+    query += `
+    OR id=${cart_keys[i]} 
+    `;
+  }
+  db.query(query, (error, result) => {
+    if(!result){
+      contents += `
+      </tbody>
+      </table>
+      장바구니 담긴 상품이 없습니다.
+    `;
+    var html = template.html(authStatusUi, contents);
+    response.send(html);
+    return;
+    }
+
+    var total = 0;
+    for(var i = 0; result && i < result.length; i++){
+      contents += `
+      <tr>
+        <th scope="row">${i + 1}</th>
+        <td>${result[i].name}</td>
+        <td>${parseInt(cart[cart_keys[i]])}</td>
+        <td>${parseInt(result[i].price) * parseInt(cart[cart_keys[i]])}</td>
+        <td><button class="btn btn-outline-danger" ><a href="/auth/delete_cart/${result[i].id}">상품 삭제</a></button></td>
+      </tr>
+      `;
+      total += parseInt(result[i].price) * parseInt(cart[cart_keys[i]])
+    }
+    
+    contents += `
+    </tbody>
+    </table>
+    <h5>결제 금액: ${total}원</h5>
+    `;
+    var html = template.html(authStatusUi, contents);
+    response.send(html);
+  });
+});
+
+// 장바구니 삭제
+router.get('/delete_cart/:productId', (request, response)=>{
+  var pid = request.params.productId;
+  console.log("pid: " + pid);
+  if(request.cookies.cart) {
+    var cart = request.cookies.cart;
+  }
+
+  if(cart[pid]){
+    //response.clearCookie(`${cart[pid]}`);
+    //cookies.set(`${cart[pid]}`, {maxAge: 0});
+    //response.cookie(`${cart[pid]}`, '', {expire: Date.now()}); 
+    delete cart[pid];
+    //cart[pid] = null;
+  }
+  console.log("cart: " + cart[2]);
+  
+  response.cookie('cart', cart);
+
+  response.redirect(302, `/auth/cart`);
 });
 
 module.exports = router;
