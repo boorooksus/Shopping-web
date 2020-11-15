@@ -3,6 +3,7 @@ var router = express.Router();
 var template = require('../lib/template.js');
 var auth = require('../lib/auth.js');
 
+// 메인 페이지
 router.get('/', (request, response) => {
     var authStatusUi = auth.statusUi(request, response);
     var contents = `
