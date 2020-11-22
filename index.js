@@ -14,6 +14,10 @@ var productRouter = require('./routes/product.js');
 var authRouter = require('./routes/auth.js');
 var adminRouter = require('./routes/admin.js');
 
+// const ngrok = require('ngrok');
+// (async function() {
+//   const url = await ngrok.connect(3000);
+// })();
 
 app.use(express.static('public'));
 app.use(bodyParser.urlencoded({extended:false}));

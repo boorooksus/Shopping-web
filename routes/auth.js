@@ -487,7 +487,7 @@ router.get('/cart', (request, response) => {
         <th scope="row">${i + 1}</th>
         <td>${result[i].name}</td>
         <td>${parseInt(cart[cart_keys[i]])}</td>
-        <td>${parseInt(result[i].price) * parseInt(cart[cart_keys[i]])}</td>
+        <td><script>showPrice(${parseInt(result[i].price) * parseInt(cart[cart_keys[i]])})</script></td>
         <td><button class="btn btn-outline-danger" ><a href="/auth/delete_cart/${result[i].id}">상품 삭제</a></button></td>
       </tr>
       `;
@@ -497,7 +497,7 @@ router.get('/cart', (request, response) => {
     contents += `
     </tbody>
     </table>
-    <h5>결제 금액: ${total}원</h5>
+    <h5>결제 금액: <script>showPrice(${total})</script>원</h5>
     <button class="btn btn-success" onclick="confirm('구매 하시겠습니까?')">구매하기</button>
     <button class="btn btn-danger" ><a href="/auth/clear_cart" onclick="return confirm('장바구니를 비우시겠습니까?')" >장바구니 비우기</a></button>
     `;

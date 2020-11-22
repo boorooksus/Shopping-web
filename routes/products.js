@@ -32,8 +32,8 @@ router.get('/:category/:pageNum', (request, response) => {
               </a>
                 <div class="card-body">
                   <h5 class="card-title"><a href="/product/${result[i].id}">${result[i].name}</a></h5>
-                  <p class="card-text">
-                  ${result[i].price}
+                  <p class="card-text" >
+                  <script>showPrice(${result[i].price})</script>
                   </p>
                 </div>
               </div>
@@ -74,30 +74,11 @@ router.get('/:category/:pageNum', (request, response) => {
         }
         else{
           pagination += `<li class="page-item"><a class="page-link" href="/products/${category}/${i}">${i}</a></li>`;
-            //pageList += `<li><a href="/topic/browsing/${i}">[${i}]</a></li>`;
         }
         i++;
       }
       pagination += `</ul></nav>`;
 
-//       <nav aria-label="...">
-//   <ul class="pagination">
-//     <li class="page-item disabled">
-//       <span class="page-link">Previous</span>
-//     </li>
-//     <li class="page-item"><a class="page-link" href="#">1</a></li>
-//     <li class="page-item active">
-//       <span class="page-link">
-//         2
-//         <span class="sr-only">(current)</span>
-//       </span>
-//     </li>
-//     <li class="page-item"><a class="page-link" href="#">3</a></li>
-//     <li class="page-item">
-//       <a class="page-link" href="#">Next</a>
-//     </li>
-//   </ul>
-// </nav>
       contents += pagination;
       var html = template.html(authStatusUi, contents);
       response.send(html);
@@ -137,7 +118,7 @@ router.get('/search/:term/:pageNum', (request, response) => {
         <div class="card-body">
           <h5 class="card-title">${result[i].name}</h5>
           <p class="card-text">
-          ${result[i].price}
+          <script>showPrice(${result[i].price})</script>
           </p>
         </div>
       </div>

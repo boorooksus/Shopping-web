@@ -6,31 +6,35 @@
 <br>
 
 ### 프로젝트 실행 방법
-1. MySQL 설치
-
-2. Node.js 설치
-
+1. Node.js 설치
+2. MySQL 설치
 3. MySQL 인스턴스 생성
-    - mysql 실행 후 프로젝트 폴더 내의 'db-data.sql' 파일의 명령어들 입력
-    
-4. 프로그램에 필요한 NPM 모듈 설치
-    - CMD창에서 프로젝트 폴더 디렉토리로 이동 후 'npm install' 명령어 입력
-    
-5. 프로젝트와 데이터베이스 연동
-    - lib폴더 내의 'db.template.js' 파일에서 user, password, database 항목 빈칸에 mysql 정보들을 입력 후 저장
+    - 프로젝트 폴더 내의 'database.sql' 파일에 있는 명령어들을 복사하여 mysql 실행 후 붙여넣기하여 입력
+4. 프로젝트와 데이터베이스 연동
+    - lib폴더 내의 'db.template.js' 파일에서 user, password에 mysql 정보들을 입력 후 저장
     - 'db.template.js' 파일의 이름을 'db.js'로 변경
-    
+5. 프로그램에 필요한 NPM 모듈 설치
+    - CMD창에서 프로젝트 폴더 디렉토리로 이동 후 'npm install' 명령어 입력
 6. 프로젝트 실행
     - CMD창에서 프로젝트 폴더 디렉토리 이동 후 'npm run start' 명령어 입력
     - 웹 브라우저에서 <http://localhost:3000/>으로 이동
+
+※ ngrok npm을 이용하면 외부ip에서도 프로젝트 웹 어플리케이션에 접속 가능합니다. 사용 방법은 '6. 프로젝트 실행'에서 'npm run start' 입력 전에 아래 입력어를 먼저 입력해 주세요
+
+		npm install ngrok - g
+		
+		ngrok http 3000
+
+
 
 <br>
 
 ### 활용 언어 및 기술
 - HTML
 - CSS
-- JavaScript
+- Media Query
 - Bootstrap
+- JavaScript
 - Node.js
 - Express.js
 - NPM
@@ -49,7 +53,7 @@
 
 ![상품목록](https://user-images.githubusercontent.com/55964775/99182316-a6ebe100-2777-11eb-8198-5a07eae49e19.png)
 
-페이지당 상품의 개수가 최대 20개씩 페이징
+페이지당 보여지는 상품의 개수가 최대 20개가 되도록 페이징
 
 
 
@@ -148,4 +152,20 @@
 - 관리자 계정에서의 상품 상세 보기 페이지
 
 ![제품정보수정](https://user-images.githubusercontent.com/55964775/99182373-fcc08900-2777-11eb-9d10-0c0d41618770.JPG)
+
+<br>
+
+### 데이터베이스 스키마
+
+1. 상품 정보 테이블
+
+![desc product table2](https://user-images.githubusercontent.com/55964775/99185794-7f087780-278f-11eb-8242-0b5627c66a1c.JPG)
+
+
+
+2. 회원 정보 테이블
+
+![desc user table2](https://user-images.githubusercontent.com/55964775/99185795-84fe5880-278f-11eb-83a9-ed3e43c00735.JPG)
+
+<br>
 

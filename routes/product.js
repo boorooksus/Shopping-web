@@ -207,7 +207,8 @@ router.get('/:productId', function(request, response, next){
     </div>
     <div class="col-md-6">
               <h3>${sanitizedName}</h3>
-              <p>${result[0].price}원</p> 
+              <p><script>showPrice(${result[0].price})</script>원</p> 
+              
               ${authProductUi}
               <hr>
               <p>${sanitizedDes}</p>
