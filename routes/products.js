@@ -19,8 +19,8 @@ router.get('/:category/:pageNum', (request, response) => {
     `;
 
     db.query(query, [category], (error, result) => {
-      var cur = (pageNum - 1) * 20;
-      var end = cur + 20;
+      var cur = (pageNum - 1) * 12;
+      var end = cur + 12;
       while(cur < end && cur < result.length){
         contents += `<div class="card-deck">`;
         for(var i=cur; i < cur + 4; i++){
@@ -63,7 +63,7 @@ router.get('/:category/:pageNum', (request, response) => {
         i = Number(pageNum) - 2;
         end = Number(pageNum) + 2;
       }
-      while(i < (result.length / 20 + 1) && i <= end){
+      while(i < (result.length / 12 + 1) && i <= end){
         if(i === Number(pageNum)){
           pagination += `<li class="page-item active">
           <span class="page-link">
@@ -104,8 +104,8 @@ router.get('/search/:term/:pageNum', (request, response) => {
   db.query(`SELECT * FROM product WHERE name LIKE '%${term}%' OR description LIKE '%${term}%' ORDER BY id DESC`, (error, result) => {
 
     var list = '<div id="columns">';
-    var cur = (pageNum - 1) * 20;
-    var end = cur + 20;
+    var cur = (pageNum - 1) * 12;
+    var end = cur + 12;
     while(cur < end && cur < result.length){
       contents += `<div class="card-deck">`;
       for(var i=cur; i < cur + 4; i++){
@@ -149,7 +149,7 @@ router.get('/search/:term/:pageNum', (request, response) => {
       i = Number(pageNum) - 2;
       end = Number(pageNum) + 2;
     }
-    while(i < (result.length / 20 + 1) && i <= end){
+    while(i < (result.length / 12 + 1) && i <= end){
       if(i === Number(pageNum)){
         pagination += `<li class="page-item active">
         <span class="page-link">

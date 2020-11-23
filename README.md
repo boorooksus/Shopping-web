@@ -51,9 +51,9 @@
 
 - 상품 목록
 
-![상품목록](https://user-images.githubusercontent.com/55964775/99182316-a6ebe100-2777-11eb-8198-5a07eae49e19.png)
+![목록2](https://user-images.githubusercontent.com/55964775/99929524-e6768680-2d90-11eb-95b7-3c0d8eb98178.png)
 
-페이지당 보여지는 상품의 개수가 최대 20개가 되도록 페이징
+페이지당 보여지는 상품의 개수가 최대 12개가 되도록 페이징
 
 
 
