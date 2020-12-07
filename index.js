@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-const port = 3000;
+const port = 3000; // 포트 번호
 var router = express.Router();
 var bodyParser = require('body-parser');
 var session = require('express-session')
@@ -13,11 +13,6 @@ var productsRouter = require('./routes/products.js');
 var productRouter = require('./routes/product.js');
 var authRouter = require('./routes/auth.js');
 var adminRouter = require('./routes/admin.js');
-
-// const ngrok = require('ngrok');
-// (async function() {
-//   const url = await ngrok.connect(3000);
-// })();
 
 app.use(express.static('public'));
 app.use(bodyParser.urlencoded({extended:false}));
@@ -32,6 +27,7 @@ app.use(session({
     store:new FileStore()
   }))
 
+// url에 따라 라우팅
 app.use('/', indexRouter);
 app.use('/products', productsRouter);
 app.use('/product', productRouter);

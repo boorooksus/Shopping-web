@@ -1,3 +1,4 @@
+// 상품 등록 페이지에서 입력창이 모두 작성돼 있는지 체크 여부 알려주는 함수
 function addCheck(){
     var add = document.getElementById("add_product");
     for(var i = 0; i < add.length; i++){

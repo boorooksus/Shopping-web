@@ -5,7 +5,9 @@ var template = require('../lib/template.js');
 var auth = require('../lib/auth.js');
 var db = require('../lib/db.js');
 
+// 관리자 페이지
 router.get('/', (request, response) => {
+    // 관리자 계정이 아닌 경우 뒤로가기
     if(!auth.isAdmin(request, response)){
         response.send(`
             <script>alert('관리자만 접속 가능한 페이지입니다.')
@@ -26,7 +28,7 @@ router.get('/', (request, response) => {
     <h5>회원 정보</h5>
     <ul class="list-group">
     `;
-
+    // db에서 전체 회원들의 정보 가져옴
     db.query(`SELECT * FROM user ORDER BY id DESC`, (error, result) => {
       for(var i = 0; i < result.length; i++){
         contents += `
@@ -47,6 +49,7 @@ router.get('/', (request, response) => {
       <h5>상품 정보</h5>
       <ul class="list-group">`;
 
+      // db에서 전체 상품들의 정보 가져옴
       db.query(`SELECT * FROM product ORDER BY updated DESC`, (error, result2) => {
         for(var i = 0; i < result2.length; i++){
           var created = new Date(result2[i].created);

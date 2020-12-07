@@ -193,7 +193,8 @@ router.get('/logout', (request, response) => {
 
 // 회원가입 페이지
 router.get('/join', (request, response) => {
-    isUserChecked = false;
+    //isUserChecked = false;
+    request.session.is_user_checked = false;
     var authStatusUi = auth.statusUi(request, response);
     var contents = `
     <form id="join" method="post">
@@ -249,7 +250,7 @@ router.post('/userCheck', (request, response) => {
           `);
           return;
       } else{
-          isUserChecked = true;
+        request.session.is_user_checked = true;
           response.send(`
           <script>
           alert("사용 가능한 이메일입니다")
@@ -263,7 +264,7 @@ router.post('/userCheck', (request, response) => {
 
 // 회원가입 처리
 router.post('/join_process', (request, response)=>{
-  if(isUserChecked === false){
+  if(request.session.is_user_checked === false){
     response.send(`
       <script>alert("이메일 중복 체크를 확인해주세요")
       window.history.back();

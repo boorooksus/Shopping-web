@@ -1,3 +1,4 @@
+// 가격에 콤마를 표시해주는 함수
 function showPrice(price){
     var ret = "";
     var price = price.toString();
@@ -11,7 +12,6 @@ function showPrice(price){
         ret = price[i] + ret;
         temp++;
     }
-    console.log("ret: " + ret);
-    //return ret;
+
     document.write(ret);
 }
